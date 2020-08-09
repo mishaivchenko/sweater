@@ -1,7 +1,24 @@
-<html>
+<html lang="en">
 <body>
 <div>
-    {{some}}
+    <form method="post">
+        <input type="text" name = "text" placeholder="Write message">
+        <input type="text" name="tag" placeholder="Write tag">
+        <button type="submit">Submit</button>
+    </form>
+<div>Список сообщений</div>
+    <form method="post" action="filter">
+        <input type="text" name="filter">
+        <button  type="submit">Filter</button>
+    </form>
+
+{{#messages}}
+    <div>
+    <b>{{id}}</b>
+    <span>{{text}}</span>
+    <i>{{tag}}</i>
+    </div>
+{{/messages}}
 </div>
 </body>
 </html>
