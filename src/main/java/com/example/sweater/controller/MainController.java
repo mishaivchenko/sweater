@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -26,9 +25,17 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model) {
-        Iterable<Message> messages = messageRepository.findAll();
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Map<String, Object> model) {
+
+        Iterable<Message> messages;
+
+        if(filter != null && !filter.isEmpty()){
+            messages = messageRepository.findByTag(filter);
+        } else {
+            messages = messageRepository.findAll();
+        }
         model.put("messages", messages);
+        model.put("filter",filter);
         return "main";
     }
 
@@ -46,20 +53,5 @@ public class MainController {
 
     }
 
-    @RequestMapping("/filter")
-    public String filter(@RequestParam String filter,
-                         Map<String, Object> model) {
 
-        Iterable<Message> messages;
-
-        if(filter != null && !filter.isEmpty()){
-            messages = messageRepository.findByTag(filter);
-        } else {
-            messages = messageRepository.findAll();
-        }
-
-        model.put("messages",messages);
-
-        return "main";
-    }
 }
